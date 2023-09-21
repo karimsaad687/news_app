@@ -8,4 +8,10 @@
     //categories
     <string name="choose_category">Choose category</string>
 
+    //headlines
+    <string name="headlines">Headlines</string>
+
+    //search
+    <string name="search">Search</string>
+
 </resources>
