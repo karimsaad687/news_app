@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">NewsApp</string>
+
+    //countries
+    <string name="choose_country">Choose country</string>
+    <string name="confirm">Confirm</string>
+
+    //categories
+    <string name="choose_category">Choose category</string>
+
+</resources>

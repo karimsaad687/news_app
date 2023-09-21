@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_onboarding"
+    app:startDestination="@id/countryFragment">
+
+    <fragment
+        android:id="@+id/countryFragment"
+        android:name="com.app.newsapp.onboarding.country.CountryFragment"
+        android:label="CountryFragment" />
+    <fragment
+        android:id="@+id/categoryFragment"
+        android:name="com.app.newsapp.onboarding.category.CategoryFragment"
+        android:label="CategoryFragment" />
+</navigation>
