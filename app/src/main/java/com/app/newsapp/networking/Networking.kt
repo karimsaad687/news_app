@@ -38,6 +38,10 @@ open class Networking : ViewModel() {
             })
     }
 
+    open fun cancel(){
+        AndroidNetworking.cancelAll()
+    }
+
     open fun start(category: String, searchWord: String? = null, context: Context) {
 
     }

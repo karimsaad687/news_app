@@ -20,7 +20,7 @@ import androidx.recyclerview.widget.RecyclerView.VERTICAL
 import androidx.recyclerview.widget.RecyclerView.VISIBLE
 import androidx.room.Room
 import com.app.newsapp.R
-import com.app.newsapp.common.BaseFragment
+import com.app.newsapp.common.HeadlinesBaseFragment
 import com.app.newsapp.dashboard.Dashboard
 import com.app.newsapp.dashboard.headlines.HeadlineAdapter
 import com.app.newsapp.dashboard.headlines.HeadlineModel
@@ -35,7 +35,7 @@ import kotlinx.coroutines.withContext
 import java.util.LinkedList
 
 @SuppressLint("NotifyDataSetChanged")
-class SearchFragment : BaseFragment(), TextWatcher {
+class SearchFragment : HeadlinesBaseFragment(), TextWatcher {
 
     private lateinit var headlinesAdapter: HeadlineAdapter
     private lateinit var categoryAdapter: HorizontalCategoryAdapter
@@ -43,14 +43,14 @@ class SearchFragment : BaseFragment(), TextWatcher {
     private lateinit var root: View
     private lateinit var noDataTv: TextView
     private lateinit var searchEt: EditText
-    private var storedCategories = LinkedList<CategoryModel>()
+    private var categories = LinkedList<CategoryModel>()
     private var headlineModel = ArrayList<HeadlineModel>()
     private var selectedCategoryIndex = 0
     private lateinit var headlinesViewModel: HeadlinesViewModel
     private lateinit var observer: Observer<ArrayList<HeadlineModel>>
     private var oldSelectedIndex = 0
     private var uiInitialized = false
-    private var searchWord=""
+    private var searchWord = ""
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -63,8 +63,10 @@ class SearchFragment : BaseFragment(), TextWatcher {
             noDataTv = root.findViewById(R.id.no_data_tv)
             searchEt = root.findViewById(R.id.search_et)
 
+            categories = CategoryUtils.getAllCategories()
+
             val recycler = root.findViewById<RecyclerView>(R.id.recycler_categories)
-            categoryAdapter = HorizontalCategoryAdapter(CategoryUtils.getAllCategories(), this)
+            categoryAdapter = HorizontalCategoryAdapter(categories, this)
             recycler.layoutManager = LinearLayoutManager(requireContext(), HORIZONTAL, false)
             recycler.adapter = categoryAdapter
 
@@ -86,18 +88,23 @@ class SearchFragment : BaseFragment(), TextWatcher {
             }
             headlinesViewModel.getLiveData()?.observeForever(observer)
 
-            getCategories()
+
+            getStoredCategories()
             searchEt.addTextChangedListener(this)
 
         }
         return root
     }
 
-    private fun getCategories() = runBlocking {
+    private fun getStoredCategories() = runBlocking {
         withContext(Dispatchers.IO) {
-            storedCategories.addAll(db.categoryDao().getAllCategories())
-            storedCategories[1].selected = false
-            storedCategories[2].selected = false
+            val storedCategories = ArrayList<CategoryModel>(db.categoryDao().getAllCategories())
+            for (index in storedCategories.size - 1 downTo 0) {
+                categories.remove(storedCategories[index])
+                categories.addFirst(storedCategories[index])
+            }
+            categories[1].selected = false
+            categories[2].selected = false
             categoryAdapter.notifyDataSetChanged()
             callHeadlines()
         }
@@ -110,12 +117,18 @@ class SearchFragment : BaseFragment(), TextWatcher {
     }
 
     private fun callHeadlines() {
-        headlinesViewModel.start(storedCategories[selectedCategoryIndex].name,searchWord, requireContext())
+        headlineModel.clear()
+        headlinesAdapter.notifyDataSetChanged()
+        headlinesViewModel.start(
+            categories[selectedCategoryIndex].name,
+            searchWord,
+            requireContext()
+        )
     }
 
     fun onCategorySelected(position: Int) {
-        if (oldSelectedIndex > -1 && oldSelectedIndex != position && storedCategories[oldSelectedIndex].selected) {
-            storedCategories[oldSelectedIndex].selected = false
+        if (oldSelectedIndex > -1 && oldSelectedIndex != position && categories[oldSelectedIndex].selected) {
+            categories[oldSelectedIndex].selected = false
             categoryAdapter.notifyItemChanged(oldSelectedIndex)
         }
         categoryAdapter.notifyItemChanged(position)
@@ -134,11 +147,12 @@ class SearchFragment : BaseFragment(), TextWatcher {
 
     override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
         Handler(Looper.getMainLooper()).postDelayed({
-            if(searchWord != searchEt.text.toString()){
+            if (searchWord != searchEt.text.toString()) {
                 searchWord = searchEt.text.toString()
+                headlinesViewModel.cancel()
                 callHeadlines()
             }
-        }, 500)
+        }, 1000)
     }
 
     override fun afterTextChanged(p0: Editable?) {

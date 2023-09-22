@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView.VERTICAL
 import androidx.recyclerview.widget.RecyclerView.VISIBLE
 import androidx.room.Room
 import com.app.newsapp.R
-import com.app.newsapp.common.BaseFragment
+import com.app.newsapp.common.HeadlinesBaseFragment
 import com.app.newsapp.dashboard.Dashboard
 import com.app.newsapp.database.category.CategoryDatabase
 import com.app.newsapp.onboarding.category.CategoryModel
@@ -23,37 +23,36 @@ import com.app.newsapp.onboarding.category.HorizontalCategoryAdapter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
-import java.util.ArrayList
 import java.util.LinkedList
 
 @SuppressLint("NotifyDataSetChanged")
-class HeadlinesFragment : BaseFragment() {
+class HeadlinesFragment : HeadlinesBaseFragment() {
 
     private lateinit var headlinesAdapter: HeadlineAdapter
     private lateinit var categoryAdapter: HorizontalCategoryAdapter
     private lateinit var db: CategoryDatabase
     private lateinit var root: View
     private lateinit var noDataTv: TextView
-    private var storedCategories = LinkedList<CategoryModel>()
+    private var categories = LinkedList<CategoryModel>()
     private var headlineModel = ArrayList<HeadlineModel>()
     private var selectedCategoryIndex = 0
     private lateinit var headlinesViewModel: HeadlinesViewModel
     private lateinit var observer: Observer<ArrayList<HeadlineModel>>
     private var oldSelectedIndex = 0
-    private var uiInitialized=false
+    private var uiInitialized = false
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        if(!uiInitialized) {
-            uiInitialized=true
+        if (!uiInitialized) {
+            uiInitialized = true
             root = inflater.inflate(R.layout.fragment_headlines, container, false)
 
             noDataTv = root.findViewById(R.id.no_data_tv)
 
             val recycler = root.findViewById<RecyclerView>(R.id.recycler_categories)
-            categoryAdapter = HorizontalCategoryAdapter(storedCategories, this)
+            categoryAdapter = HorizontalCategoryAdapter(categories, this)
             recycler.layoutManager = LinearLayoutManager(requireContext(), HORIZONTAL, false)
             recycler.adapter = categoryAdapter
 
@@ -82,9 +81,9 @@ class HeadlinesFragment : BaseFragment() {
 
     private fun getCategories() = runBlocking {
         withContext(Dispatchers.IO) {
-            storedCategories.addAll(db.categoryDao().getAllCategories())
-            storedCategories[1].selected = false
-            storedCategories[2].selected = false
+            categories.addAll(db.categoryDao().getAllCategories())
+            categories[1].selected = false
+            categories[2].selected = false
             categoryAdapter.notifyDataSetChanged()
             callHeadlines()
         }
@@ -99,12 +98,12 @@ class HeadlinesFragment : BaseFragment() {
     private fun callHeadlines() {
         headlineModel.clear()
         headlinesAdapter.notifyDataSetChanged()
-        headlinesViewModel.start(storedCategories[selectedCategoryIndex].name,null, requireContext())
+        headlinesViewModel.start(categories[selectedCategoryIndex].name, null, requireContext())
     }
 
     fun onCategorySelected(position: Int) {
-        if (oldSelectedIndex > -1 && oldSelectedIndex != position && storedCategories[oldSelectedIndex].selected) {
-            storedCategories[oldSelectedIndex].selected = false
+        if (oldSelectedIndex > -1 && oldSelectedIndex != position && categories[oldSelectedIndex].selected) {
+            categories[oldSelectedIndex].selected = false
             categoryAdapter.notifyItemChanged(oldSelectedIndex)
         }
         categoryAdapter.notifyItemChanged(position)
