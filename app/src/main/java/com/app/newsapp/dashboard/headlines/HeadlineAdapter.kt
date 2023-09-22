@@ -1,16 +1,23 @@
 package com.app.newsapp.dashboard.headlines
 
+import android.content.Intent
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.URLUtil
 import android.widget.TextView
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView.Adapter
+import androidx.recyclerview.widget.RecyclerView.GONE
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.app.newsapp.R
 import com.app.newsapp.common.BaseFragment
+import com.app.newsapp.utils.DateUtils
 import com.makeramen.roundedimageview.RoundedImageView
 import com.squareup.picasso.Picasso
 import java.util.LinkedList
+
 
 class HeadlineAdapter(
     private val list: LinkedList<HeadlineModel>,
@@ -29,7 +36,7 @@ class HeadlineAdapter(
     }
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
-        holder.onBind(list[position], position, baseFragment)
+        holder.onBind(list[position], baseFragment)
     }
 
     class Holder(itemView: View) : ViewHolder(itemView) {
@@ -42,17 +49,31 @@ class HeadlineAdapter(
 
         fun onBind(
             headlineModel: HeadlineModel,
-            position: Int,
             baseFragment: BaseFragment
         ) {
             articleTitleTv.text = headlineModel.title
             articleDescTv.text = headlineModel.description
-            articleDateTv.text = headlineModel.publishedAt
+            articleDateTv.text = DateUtils.convertIsoFormatToLocalTime(headlineModel.publishedAt)
             articleSourceTv.text = headlineModel.sourceName
 
-            Picasso.get().load(headlineModel.urlToImage).into(articleIm)
-            itemView.setOnClickListener {
+            if (headlineModel.sourceName.length < 5) {
+                articleSourceTv.visibility = GONE
+            }
 
+            if (headlineModel.description.length < 5) {
+                articleDescTv.visibility = GONE
+            }
+
+            if (headlineModel.urlToImage.length < 5) {
+                articleIm.visibility = GONE
+            } else {
+                Picasso.get().load(headlineModel.urlToImage).into(articleIm)
+            }
+            if (URLUtil.isValidUrl(headlineModel.url)) {
+                itemView.setOnClickListener {
+                    val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(headlineModel.url))
+                    startActivity(baseFragment.requireContext(), browserIntent, null)
+                }
             }
         }
     }

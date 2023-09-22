@@ -1,6 +1,12 @@
 package com.app.newsapp.dashboard.headlines
 
+import android.util.Log
 import org.json.JSONObject
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.Locale
+import java.util.TimeZone
+
 
 class HeadlineModel(json: JSONObject) {
     lateinit var sourceName: String
@@ -21,6 +27,7 @@ class HeadlineModel(json: JSONObject) {
         url = checkJson(json, "url")
         urlToImage = checkJson(json, "urlToImage")
         publishedAt = checkJson(json, "publishedAt")
+
     }
 
     private fun checkJson(json: JSONObject, jsonString: String): String {

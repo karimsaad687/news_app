@@ -33,6 +33,7 @@ class HeadlinesViewModel : Networking() {
                 list.addLast(HeadlineModel(articlesArray.getJSONObject(i)))
             }
         }
-        liveData?.postValue(list)
+        Log.i("datadata2",(getLiveData()==null).toString())
+        getLiveData()?.postValue(list)
     }
 }

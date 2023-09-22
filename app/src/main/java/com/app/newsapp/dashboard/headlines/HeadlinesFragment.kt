@@ -1,9 +1,7 @@
 package com.app.newsapp.dashboard.headlines
 
 import android.annotation.SuppressLint
-import android.database.Observable
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,9 +29,9 @@ class HeadlinesFragment : BaseFragment() {
     private lateinit var root: View
     private var storedCategories = LinkedList<CategoryModel>()
     private var headlineModel = LinkedList<HeadlineModel>()
-    private var selectedCategoryIndex=0
-    private lateinit var headlinesViewModel:HeadlinesViewModel
-    private lateinit var observer:Observer<LinkedList<HeadlineModel>>
+    private var selectedCategoryIndex = 0
+    private lateinit var headlinesViewModel: HeadlinesViewModel
+    private lateinit var observer: Observer<LinkedList<HeadlineModel>>
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -56,33 +54,29 @@ class HeadlinesFragment : BaseFragment() {
             CategoryDatabase::class.java, "CategoryTable"
         ).fallbackToDestructiveMigration().build()
 
-        getCategories()
-
-        headlinesViewModel= HeadlinesViewModel()
-        observer= Observer {
-            fun onChanged(list: LinkedList<HeadlineModel>) {
-                headlineModel.addAll(list)
-                headlinesAdapter.notifyDataSetChanged()
-                Log.i("datadata","headlines")
-            }
+        headlinesViewModel = HeadlinesViewModel()
+        observer = Observer { list ->
+            headlineModel.addAll(list)
+            headlinesAdapter.notifyDataSetChanged()
         }
-        headlinesViewModel.getLiveData()?.observe(viewLifecycleOwner,observer)
+        headlinesViewModel.getLiveData()?.observe(viewLifecycleOwner, observer)
+
+        getCategories()
 
         return root
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     private fun getCategories() = runBlocking {
         withContext(Dispatchers.IO) {
             storedCategories.addAll(db.categoryDao().getAllCategories())
-            storedCategories[1].selected=false
-            storedCategories[2].selected=false
+            storedCategories[1].selected = false
+            storedCategories[2].selected = false
             categoryAdapter.notifyDataSetChanged()
             callHeadlines()
         }
     }
 
-    private fun callHeadlines(){
-        HeadlinesViewModel().start(storedCategories[selectedCategoryIndex].name,requireContext())
+    private fun callHeadlines() {
+        headlinesViewModel.start(storedCategories[selectedCategoryIndex].name, requireContext())
     }
 }
