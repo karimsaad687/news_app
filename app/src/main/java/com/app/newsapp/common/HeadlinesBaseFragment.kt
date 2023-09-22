@@ -53,7 +53,7 @@ open class HeadlinesBaseFragment : BaseFragment() {
 
         headlinesViewModel = HeadlinesViewModel()
         observer = Observer { list ->
-            Log.i("datadata","error "+list.size)
+            Log.i("datadata", "error " + list.size)
             headlineModels.addAll(list)
             showHideLoading(false)
             checkFavHeadlines()
@@ -131,8 +131,7 @@ open class HeadlinesBaseFragment : BaseFragment() {
 
     /**
      * used to get the stored categories from database
-     * then remove them from all categories list then add them at the beginning of the list
-     * with the same order you selected from onboarding screen
+     * then remove them from all categories list and add them at the beginning
      * this function used in SearchFragment
      */
     open fun getAllAndStoredCategories() {
@@ -205,7 +204,8 @@ open class HeadlinesBaseFragment : BaseFragment() {
             CoroutineScope(Dispatchers.Main).launch {
                 headlinesAdapter.notifyDataSetChanged()
 
-                noDataTv.visibility = if (headlineModels.size == 0) RecyclerView.VISIBLE else View.GONE
+                noDataTv.visibility =
+                    if (headlineModels.size == 0) RecyclerView.VISIBLE else View.GONE
             }
         }
     }

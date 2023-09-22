@@ -10,15 +10,17 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.VERTICAL
 import androidx.room.Room
-import com.app.newsapp.onboarding.Onboarding
 import com.app.newsapp.R
 import com.app.newsapp.common.BaseFragment
 import com.app.newsapp.dashboard.Dashboard
 import com.app.newsapp.database.category.CategoryDatabase
+import com.app.newsapp.onboarding.Onboarding
 import com.app.newsapp.utils.CategoryUtils
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
+import java.util.LinkedList
 
 class CategoryFragment : BaseFragment() {
 
@@ -28,6 +30,7 @@ class CategoryFragment : BaseFragment() {
     private lateinit var confirmBtn: Button
     private var categorySelected = false
     private var numberOfSelectedItem = 0
+    private lateinit var categories: LinkedList<CategoryModel>
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -37,8 +40,10 @@ class CategoryFragment : BaseFragment() {
 
         confirmBtn = root.findViewById(R.id.confirm_btn)
 
+        categories = CategoryUtils.getAllCategories()
+
         val recycler = root.findViewById<RecyclerView>(R.id.recycler)
-        categoryAdapter = CategoryAdapter(CategoryUtils.getAllCategories(), this)
+        categoryAdapter = CategoryAdapter(categories, this)
         recycler.layoutManager = LinearLayoutManager(requireContext(), VERTICAL, false)
         recycler.adapter = categoryAdapter
 
@@ -49,13 +54,30 @@ class CategoryFragment : BaseFragment() {
 
         confirmBtn.setOnClickListener {
             if (categorySelected) {
-                requireActivity().finish()
-                startActivity(Intent(requireContext(), Dashboard::class.java))
+                storeCategories()
             }
         }
 
         return root
     }
+
+    override fun onResume() {
+        super.onResume()
+        (activity as Onboarding).setTitle(activity.getString(R.string.choose_category))
+    }
+
+    private fun storeCategories() {
+        CoroutineScope(Dispatchers.IO).launch {
+            for (index in 0 until categories.size) {
+                if (categories[index].selected) {
+                    db.categoryDao().insertCategory(categories[index])
+                }
+            }
+            requireActivity().finish()
+            startActivity(Intent(requireContext(), Dashboard::class.java))
+        }
+    }
+
 
     fun getNumberOfSelectedCategories(): Int {
         return numberOfSelectedItem
@@ -68,18 +90,6 @@ class CategoryFragment : BaseFragment() {
         confirmBtn.alpha = if (numberOfSelectedItem == 3) 1.0f else 0.3f
         categorySelected = (numberOfSelectedItem == 3)
 
-        withContext(Dispatchers.IO) {
-            if (model.selected) {
-                val id = db.categoryDao().insertCategory(model)
-                model.id = id.toInt()
-            } else {
-                db.categoryDao().deleteCategory(model)
-            }
-        }
     }
 
-    override fun onResume() {
-        super.onResume()
-        (activity as Onboarding).setTitle(activity.getString(R.string.choose_category))
-    }
 }
