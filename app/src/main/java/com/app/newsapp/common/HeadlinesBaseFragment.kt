@@ -112,8 +112,8 @@ open class HeadlinesBaseFragment : BaseFragment() {
         )
     }
 
-    open fun getCategories() = runBlocking {
-        withContext(Dispatchers.IO) {
+    open fun getStoredCategories() {
+        CoroutineScope(Dispatchers.IO).launch {
             categories.addAll(categoryDB.categoryDao().getAllCategories())
             categories[1].selected = false
             categories[2].selected = false
@@ -122,8 +122,8 @@ open class HeadlinesBaseFragment : BaseFragment() {
         }
     }
 
-    open fun getStoredCategories() = runBlocking {
-        withContext(Dispatchers.IO) {
+    open fun getAllAndStoredCategories() {
+        CoroutineScope(Dispatchers.IO).launch {
             val storedCategories =
                 ArrayList<CategoryModel>(categoryDB.categoryDao().getAllCategories())
             for (index in storedCategories.size - 1 downTo 0) {

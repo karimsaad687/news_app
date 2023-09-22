@@ -56,7 +56,7 @@ class SearchFragment : HeadlinesBaseFragment(), TextWatcher {
             recyclerHeadlines.layoutManager = LinearLayoutManager(requireContext(), VERTICAL, false)
             recyclerHeadlines.adapter = headlinesAdapter
 
-            getStoredCategories()
+            getAllAndStoredCategories()
             searchEt.addTextChangedListener(this)
             searchWord = ""
 

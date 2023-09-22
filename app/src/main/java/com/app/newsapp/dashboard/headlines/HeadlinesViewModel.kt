@@ -4,10 +4,10 @@ import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import com.androidnetworking.error.ANError
 import com.app.newsapp.common.ConstantURLS
-import com.app.newsapp.networking.Networking
+import com.app.newsapp.networking.BaseViewModel
 import org.json.JSONObject
 
-class HeadlinesViewModel : Networking() {
+class HeadlinesViewModel : BaseViewModel() {
 
     private var liveData: MutableLiveData<ArrayList<HeadlineModel>>? = null
 

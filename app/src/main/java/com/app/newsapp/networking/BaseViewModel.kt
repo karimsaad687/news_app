@@ -11,7 +11,7 @@ import com.app.newsapp.BuildConfig
 import com.app.newsapp.utils.SharedPreferencesUtils
 import org.json.JSONObject
 
-open class Networking : ViewModel() {
+open class BaseViewModel : ViewModel() {
 
     open fun get(url: String, category: String,searchWord: String? = null, context: Context) {
         val map = HashMap<String, String>()

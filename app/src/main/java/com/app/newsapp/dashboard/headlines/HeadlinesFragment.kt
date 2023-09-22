@@ -45,7 +45,7 @@ class HeadlinesFragment : HeadlinesBaseFragment() {
             recyclerHeadlines.adapter = headlinesAdapter
 
 
-            getCategories()
+            getStoredCategories()
 
             swipeToRefresh.setOnRefreshListener { // Your code to refresh the list here.
                 swipeToRefresh.isRefreshing = false
