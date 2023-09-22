@@ -33,7 +33,8 @@ open class Networking : ViewModel() {
                 }
 
                 override fun onError(anError: ANError) {
-                    Log.i("datadata", anError.errorDetail.toString())
+                    failed(anError)
+                    Log.i("datadata", anError.errorBody.toString())
                 }
             })
     }
@@ -47,6 +48,10 @@ open class Networking : ViewModel() {
     }
 
     open fun success(json: JSONObject) {
+
+    }
+
+    open fun failed(anError: ANError) {
 
     }
 }

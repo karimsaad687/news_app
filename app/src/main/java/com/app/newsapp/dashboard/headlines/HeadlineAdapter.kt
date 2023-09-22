@@ -15,10 +15,10 @@ import androidx.recyclerview.widget.RecyclerView.VISIBLE
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.app.newsapp.R
 import com.app.newsapp.common.BaseFragment
+import com.app.newsapp.common.HeadlinesBaseFragment
 import com.app.newsapp.utils.DateUtils
 import com.makeramen.roundedimageview.RoundedImageView
 import com.squareup.picasso.Picasso
-import java.util.ArrayList
 
 
 class HeadlineAdapter(
@@ -38,7 +38,7 @@ class HeadlineAdapter(
     }
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
-        holder.onBind(list[position], baseFragment)
+        holder.onBind(list[position], position, baseFragment)
     }
 
     class Holder(itemView: View) : ViewHolder(itemView) {
@@ -52,6 +52,7 @@ class HeadlineAdapter(
 
         fun onBind(
             headlineModel: HeadlineModel,
+            position: Int,
             baseFragment: BaseFragment
         ) {
             articleTitleTv.text = headlineModel.title
@@ -74,6 +75,14 @@ class HeadlineAdapter(
                     val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(headlineModel.url))
                     startActivity(baseFragment.requireContext(), browserIntent, null)
                 }
+            }
+
+            favIm.setOnClickListener {
+                headlineModel.isFav = !headlineModel.isFav
+                (baseFragment as HeadlinesBaseFragment).addRemoveHeadlineToFav(
+                    headlineModel,
+                    position
+                )
             }
         }
     }

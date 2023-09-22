@@ -5,11 +5,9 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "CategoryTable")
-data class CategoryModel constructor(
-    @ColumnInfo(name = "name") val name: String
-){
+data class CategoryModel constructor(@ColumnInfo(name = "name") val name: String) {
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0
 
-    var selected:Boolean=false
+    var selected: Boolean = false
 }

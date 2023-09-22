@@ -15,4 +15,7 @@
     //search
     <string name="search">Search</string>
 
+    //favorites
+    <string name="favorites">Favorites</string>
+
 </resources>

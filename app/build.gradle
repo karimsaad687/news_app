@@ -21,7 +21,7 @@ android {
 
     buildTypes {
         all{
-            buildConfigField "String", "app_key", "\"792854c9d87b4246a4129b27c578bae6\""
+            buildConfigField "String", "app_key", "\"0487afd54cac455db593b1b4d271126f\""
         }
         release {
             minifyEnabled false
@@ -53,7 +53,7 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui:2.7.3'
 
     //room
-    def room_version = "2.5.2"
+    def room_version = "2.5.0"
     implementation "androidx.room:room-runtime:$room_version"
     kapt("androidx.room:room-compiler:$room_version")
     kapt("androidx.room:room-ktx:$room_version")

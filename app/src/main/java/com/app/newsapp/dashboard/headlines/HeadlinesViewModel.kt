@@ -2,6 +2,7 @@ package com.app.newsapp.dashboard.headlines
 
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
+import com.androidnetworking.error.ANError
 import com.app.newsapp.common.ConstantURLS
 import com.app.newsapp.networking.Networking
 import org.json.JSONObject
@@ -41,4 +42,11 @@ class HeadlinesViewModel : Networking() {
             getLiveData()?.postValue(sortedList)
         }
     }
+
+    override fun failed(anError: ANError) {
+        super.failed(anError)
+        getLiveData()?.postValue(ArrayList())
+    }
+
+
 }

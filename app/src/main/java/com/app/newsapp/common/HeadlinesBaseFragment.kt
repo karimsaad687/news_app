@@ -2,14 +2,22 @@ package com.app.newsapp.common
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
+import android.view.View
+import android.widget.TextView
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
 import com.app.newsapp.dashboard.headlines.HeadlineAdapter
 import com.app.newsapp.dashboard.headlines.HeadlineModel
 import com.app.newsapp.dashboard.headlines.HeadlinesViewModel
 import com.app.newsapp.database.category.CategoryDatabase
+import com.app.newsapp.database.headlines.HeadlineDatabase
 import com.app.newsapp.onboarding.category.CategoryModel
 import com.app.newsapp.onboarding.category.HorizontalCategoryAdapter
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import java.util.LinkedList
@@ -17,22 +25,48 @@ import java.util.LinkedList
 @SuppressLint("NotifyDataSetChanged")
 open class HeadlinesBaseFragment : BaseFragment() {
 
-    private lateinit var db: CategoryDatabase
+    private lateinit var categoryDB: CategoryDatabase
+    private lateinit var headlinesDB: HeadlineDatabase
     private var selectedCategoryIndex = 0
     private var oldSelectedIndex = 0
     var categories = LinkedList<CategoryModel>()
     lateinit var categoryAdapter: HorizontalCategoryAdapter
-    var headlineModel = ArrayList<HeadlineModel>()
+    var headlineModels = ArrayList<HeadlineModel>()
     lateinit var headlinesAdapter: HeadlineAdapter
     lateinit var headlinesViewModel: HeadlinesViewModel
-
+    private lateinit var observer: Observer<ArrayList<HeadlineModel>>
+    lateinit var noDataTv: TextView
+    var searchWord: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        db = Room.databaseBuilder(
+        categoryDB = Room.databaseBuilder(
             requireContext(),
             CategoryDatabase::class.java, "CategoryTable"
         ).fallbackToDestructiveMigration().build()
+
+        headlinesDB = Room.databaseBuilder(
+            requireContext(),
+            HeadlineDatabase::class.java, "HeadlineTable"
+        ).fallbackToDestructiveMigration().build()
+
+        headlinesViewModel = HeadlinesViewModel()
+        observer = Observer { list ->
+            headlineModels.addAll(list)
+            checkFavHeadlines()
+            headlinesAdapter.notifyDataSetChanged()
+            noDataTv.visibility = if (headlineModels.size == 0) RecyclerView.VISIBLE else View.GONE
+        }
+        headlinesViewModel.getLiveData()?.observeForever(observer)
     }
+
+    override fun onResume() {
+        super.onResume()
+        if (headlineModels.size > 0) {
+            Log.i("datadata", "hello")
+            checkFavHeadlines()
+        }
+    }
+
     open fun onCategorySelected(position: Int) {
         if (oldSelectedIndex > -1 && oldSelectedIndex != position && categories[oldSelectedIndex].selected) {
             categories[oldSelectedIndex].selected = false
@@ -42,21 +76,25 @@ open class HeadlinesBaseFragment : BaseFragment() {
         oldSelectedIndex = position
         if (oldSelectedIndex != selectedCategoryIndex) {
             selectedCategoryIndex = oldSelectedIndex
-            headlineModel.clear()
+            headlineModels.clear()
             headlinesAdapter.notifyDataSetChanged()
             callHeadlines()
         }
     }
 
     open fun callHeadlines() {
-        headlineModel.clear()
+        headlineModels.clear()
         headlinesAdapter.notifyDataSetChanged()
-        headlinesViewModel.start(categories[selectedCategoryIndex].name, null, requireContext())
+        headlinesViewModel.start(
+            categories[selectedCategoryIndex].name,
+            searchWord,
+            requireContext()
+        )
     }
 
     open fun getCategories() = runBlocking {
         withContext(Dispatchers.IO) {
-            categories.addAll(db.categoryDao().getAllCategories())
+            categories.addAll(categoryDB.categoryDao().getAllCategories())
             categories[1].selected = false
             categories[2].selected = false
             categoryAdapter.notifyDataSetChanged()
@@ -66,7 +104,8 @@ open class HeadlinesBaseFragment : BaseFragment() {
 
     open fun getStoredCategories() = runBlocking {
         withContext(Dispatchers.IO) {
-            val storedCategories = ArrayList<CategoryModel>(db.categoryDao().getAllCategories())
+            val storedCategories =
+                ArrayList<CategoryModel>(categoryDB.categoryDao().getAllCategories())
             for (index in storedCategories.size - 1 downTo 0) {
                 categories.remove(storedCategories[index])
                 categories.addFirst(storedCategories[index])
@@ -75,6 +114,47 @@ open class HeadlinesBaseFragment : BaseFragment() {
             categories[2].selected = false
             categoryAdapter.notifyDataSetChanged()
             callHeadlines()
+        }
+    }
+
+    open fun checkFavHeadlines() {
+        CoroutineScope(Dispatchers.IO).launch {
+            val headlineStoredModels =
+                ArrayList<HeadlineModel>(headlinesDB.headlineDao().getAllHeadlines())
+            for (index in 0 until headlineModels.size) {
+                val storedIndex = headlineStoredModels.indexOf(headlineModels[index])
+                if (storedIndex >= 0) {
+                    headlineModels[index].isFav = true
+                    headlineModels[index].id = headlineStoredModels[storedIndex].id
+                } else {
+                    headlineModels[index].isFav = false
+                }
+            }
+            CoroutineScope(Dispatchers.Main).launch {
+                headlinesAdapter.notifyDataSetChanged()
+            }
+            //
+        }
+    }
+
+    open fun addRemoveHeadlineToFav(model: HeadlineModel, position: Int) = runBlocking {
+        headlinesAdapter.notifyItemChanged(position)
+        withContext(Dispatchers.IO) {
+            if (model.isFav) {
+                val id = headlinesDB.headlineDao().insertHeadline(model)
+                model.id = id.toInt()
+            } else {
+                headlinesDB.headlineDao().deleteHeadline(model)
+            }
+        }
+    }
+
+    open fun getFavHeadline() = runBlocking {
+        withContext(Dispatchers.IO) {
+            headlineModels.addAll(headlinesDB.headlineDao().getAllHeadlines())
+            CoroutineScope(Dispatchers.Main).launch {
+                headlinesAdapter.notifyDataSetChanged()
+            }
         }
     }
 

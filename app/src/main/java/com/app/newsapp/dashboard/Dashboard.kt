@@ -11,20 +11,30 @@ class Dashboard : BaseActivity() {
 
     private lateinit var titleTv: TextView
     private lateinit var searchIm: ImageView
+    private lateinit var favIm: ImageView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
 
         titleTv = findViewById(R.id.title_tv)
         searchIm = findViewById(R.id.search_im)
+        favIm = findViewById(R.id.fav_im)
 
         searchIm.setOnClickListener {
             baseFragment.navigateTo(R.id.searchFragment)
         }
+
+        favIm.setOnClickListener {
+            baseFragment.navigateTo(R.id.favoritesFragment)
+        }
     }
 
-    fun showHide(show: Boolean) {
+    fun showHideSearch(show: Boolean) {
         searchIm.visibility = if (show) View.VISIBLE else View.GONE
+    }
+
+    fun showHideFav(show: Boolean) {
+        favIm.visibility = if (show) View.VISIBLE else View.GONE
     }
 
     fun setTitle(title: String) {
