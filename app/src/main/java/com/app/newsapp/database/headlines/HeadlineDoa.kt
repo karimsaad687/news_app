@@ -1,11 +1,10 @@
-package com.app.newsapp.database.Headlines
+package com.app.newsapp.database.headlines
 
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import com.app.newsapp.dashboard.headlines.HeadlineModel
-import com.app.newsapp.onboarding.category.CategoryModel
 
 @Dao
 interface HeadlineDao {

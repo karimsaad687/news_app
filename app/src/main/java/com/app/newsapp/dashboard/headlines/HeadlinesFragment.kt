@@ -13,32 +13,17 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.HORIZONTAL
 import androidx.recyclerview.widget.RecyclerView.VERTICAL
 import androidx.recyclerview.widget.RecyclerView.VISIBLE
-import androidx.room.Room
 import com.app.newsapp.R
 import com.app.newsapp.common.HeadlinesBaseFragment
 import com.app.newsapp.dashboard.Dashboard
-import com.app.newsapp.database.category.CategoryDatabase
-import com.app.newsapp.onboarding.category.CategoryModel
 import com.app.newsapp.onboarding.category.HorizontalCategoryAdapter
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
-import java.util.LinkedList
 
 @SuppressLint("NotifyDataSetChanged")
 class HeadlinesFragment : HeadlinesBaseFragment() {
 
-    private lateinit var headlinesAdapter: HeadlineAdapter
-    private lateinit var categoryAdapter: HorizontalCategoryAdapter
-    private lateinit var db: CategoryDatabase
     private lateinit var root: View
     private lateinit var noDataTv: TextView
-    private var categories = LinkedList<CategoryModel>()
-    private var headlineModel = ArrayList<HeadlineModel>()
-    private var selectedCategoryIndex = 0
-    private lateinit var headlinesViewModel: HeadlinesViewModel
     private lateinit var observer: Observer<ArrayList<HeadlineModel>>
-    private var oldSelectedIndex = 0
     private var uiInitialized = false
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -61,11 +46,6 @@ class HeadlinesFragment : HeadlinesBaseFragment() {
             recyclerHeadlines.layoutManager = LinearLayoutManager(requireContext(), VERTICAL, false)
             recyclerHeadlines.adapter = headlinesAdapter
 
-            db = Room.databaseBuilder(
-                requireContext(),
-                CategoryDatabase::class.java, "CategoryTable"
-            ).fallbackToDestructiveMigration().build()
-
             headlinesViewModel = HeadlinesViewModel()
             observer = Observer { list ->
                 headlineModel.addAll(list)
@@ -79,15 +59,6 @@ class HeadlinesFragment : HeadlinesBaseFragment() {
         return root
     }
 
-    private fun getCategories() = runBlocking {
-        withContext(Dispatchers.IO) {
-            categories.addAll(db.categoryDao().getAllCategories())
-            categories[1].selected = false
-            categories[2].selected = false
-            categoryAdapter.notifyDataSetChanged()
-            callHeadlines()
-        }
-    }
 
     override fun onResume() {
         super.onResume()
@@ -95,24 +66,4 @@ class HeadlinesFragment : HeadlinesBaseFragment() {
         (activity as Dashboard).setTitle(activity.getString(R.string.headlines))
     }
 
-    private fun callHeadlines() {
-        headlineModel.clear()
-        headlinesAdapter.notifyDataSetChanged()
-        headlinesViewModel.start(categories[selectedCategoryIndex].name, null, requireContext())
-    }
-
-    fun onCategorySelected(position: Int) {
-        if (oldSelectedIndex > -1 && oldSelectedIndex != position && categories[oldSelectedIndex].selected) {
-            categories[oldSelectedIndex].selected = false
-            categoryAdapter.notifyItemChanged(oldSelectedIndex)
-        }
-        categoryAdapter.notifyItemChanged(position)
-        oldSelectedIndex = position
-        if (oldSelectedIndex != selectedCategoryIndex) {
-            selectedCategoryIndex = oldSelectedIndex
-            headlineModel.clear()
-            headlinesAdapter.notifyDataSetChanged()
-            callHeadlines()
-        }
-    }
 }
