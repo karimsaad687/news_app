@@ -15,6 +15,7 @@ import com.app.newsapp.database.category.CategoryDatabase
 import com.app.newsapp.database.headlines.HeadlineDatabase
 import com.app.newsapp.onboarding.category.CategoryModel
 import com.app.newsapp.onboarding.category.HorizontalCategoryAdapter
+import com.facebook.shimmer.ShimmerFrameLayout
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -36,6 +37,7 @@ open class HeadlinesBaseFragment : BaseFragment() {
     lateinit var headlinesViewModel: HeadlinesViewModel
     private lateinit var observer: Observer<ArrayList<HeadlineModel>>
     lateinit var noDataTv: TextView
+    lateinit var shimmerLoading: ShimmerFrameLayout
     var searchWord: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,9 +53,12 @@ open class HeadlinesBaseFragment : BaseFragment() {
 
         headlinesViewModel = HeadlinesViewModel()
         observer = Observer { list ->
+            Log.i("datadata","error "+list.size)
             headlineModels.addAll(list)
+            showHideLoading(false)
             checkFavHeadlines()
             headlinesAdapter.notifyDataSetChanged()
+
             noDataTv.visibility = if (headlineModels.size == 0) RecyclerView.VISIBLE else View.GONE
         }
         headlinesViewModel.getLiveData()?.observeForever(observer)
@@ -82,11 +87,26 @@ open class HeadlinesBaseFragment : BaseFragment() {
         }
     }
 
+    private fun showHideLoading(flag: Boolean) {
+        CoroutineScope(Dispatchers.Main).launch {
+            if (flag) {
+                noDataTv.visibility = View.GONE
+                shimmerLoading.visibility = View.VISIBLE
+                shimmerLoading.startShimmer()
+            } else {
+                shimmerLoading.visibility = View.GONE
+                shimmerLoading.stopShimmer()
+            }
+
+        }
+    }
+
     open fun callHeadlines() {
         headlineModels.clear()
         headlinesAdapter.notifyDataSetChanged()
+        showHideLoading(true)
         headlinesViewModel.start(
-            categories[selectedCategoryIndex].name,
+            categories[selectedCategoryIndex].nameEn,
             searchWord,
             requireContext()
         )
@@ -154,6 +174,8 @@ open class HeadlinesBaseFragment : BaseFragment() {
             headlineModels.addAll(headlinesDB.headlineDao().getAllHeadlines())
             CoroutineScope(Dispatchers.Main).launch {
                 headlinesAdapter.notifyDataSetChanged()
+
+                noDataTv.visibility = if (headlineModels.size == 0) RecyclerView.VISIBLE else View.GONE
             }
         }
     }

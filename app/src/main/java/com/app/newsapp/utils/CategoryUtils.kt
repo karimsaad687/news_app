@@ -8,13 +8,13 @@ class CategoryUtils {
     companion object {
         fun getAllCategories(): LinkedList<CategoryModel> {
             val list = LinkedList<CategoryModel>()
-            list.addLast(CategoryModel("business"))
-            list.addLast(CategoryModel("entertainment"))
-            list.addLast(CategoryModel("general"))
-            list.addLast(CategoryModel("health"))
-            list.addLast(CategoryModel("science"))
-            list.addLast(CategoryModel("sports"))
-            list.addLast(CategoryModel("technology"))
+            list.addLast(CategoryModel("business","عمل"))
+            list.addLast(CategoryModel("entertainment","ترفيه"))
+            list.addLast(CategoryModel("general","عام"))
+            list.addLast(CategoryModel("health","صحة"))
+            list.addLast(CategoryModel("science","علوم"))
+            list.addLast(CategoryModel("sports","رياضة"))
+            list.addLast(CategoryModel("technology","تكنولوجيا"))
 
             return list
         }

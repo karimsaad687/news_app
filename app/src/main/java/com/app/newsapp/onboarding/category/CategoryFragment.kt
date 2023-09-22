@@ -6,12 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.VERTICAL
 import androidx.room.Room
+import com.app.newsapp.Onboarding
 import com.app.newsapp.R
+import com.app.newsapp.common.BaseFragment
 import com.app.newsapp.dashboard.Dashboard
 import com.app.newsapp.database.category.CategoryDatabase
 import com.app.newsapp.utils.CategoryUtils
@@ -19,7 +20,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 
-class CategoryFragment : Fragment() {
+class CategoryFragment : BaseFragment() {
 
     private lateinit var categoryAdapter: CategoryAdapter
     private lateinit var db: CategoryDatabase
@@ -75,5 +76,10 @@ class CategoryFragment : Fragment() {
                 db.categoryDao().deleteCategory(model)
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (activity as Onboarding).setTitle(activity.getString(R.string.choose_category))
     }
 }

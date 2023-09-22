@@ -11,12 +11,17 @@
         android:layout_height="60dp"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_headlines"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeToRefresh"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/recycler_categories" />
+        app:layout_constraintTop_toBottomOf="@id/recycler_categories">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_headlines"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <TextView
         android:id="@+id/no_data_tv"
@@ -30,5 +35,29 @@
         app:drawableTopCompat="@drawable/ic_newspaper"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/recycler_categories" />
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/loading_shimmer"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/recycler_categories">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <include layout="@layout/adapter_headline_shimmer_item" />
+
+            <include layout="@layout/adapter_headline_shimmer_item" />
+
+            <include layout="@layout/adapter_headline_shimmer_item" />
+
+            <include layout="@layout/adapter_headline_shimmer_item" />
+        </LinearLayout>
+
+    </com.facebook.shimmer.ShimmerFrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

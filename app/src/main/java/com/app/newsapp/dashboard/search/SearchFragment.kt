@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.HORIZONTAL
 import androidx.recyclerview.widget.RecyclerView.VERTICAL
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.app.newsapp.R
 import com.app.newsapp.common.HeadlinesBaseFragment
 import com.app.newsapp.dashboard.Dashboard
@@ -21,10 +22,12 @@ import com.app.newsapp.dashboard.headlines.HeadlineAdapter
 import com.app.newsapp.onboarding.category.HorizontalCategoryAdapter
 import com.app.newsapp.utils.CategoryUtils
 
+
 @SuppressLint("NotifyDataSetChanged")
 class SearchFragment : HeadlinesBaseFragment(), TextWatcher {
 
     private lateinit var root: View
+    private lateinit var swipeToRefresh: SwipeRefreshLayout
     private lateinit var searchEt: EditText
     private var uiInitialized = false
     override fun onCreateView(
@@ -37,6 +40,8 @@ class SearchFragment : HeadlinesBaseFragment(), TextWatcher {
             root = inflater.inflate(R.layout.fragment_search, container, false)
 
             noDataTv = root.findViewById(R.id.no_data_tv)
+            swipeToRefresh = root.findViewById(R.id.swipeToRefresh)
+            shimmerLoading = root.findViewById(R.id.loading_shimmer)
             searchEt = root.findViewById(R.id.search_et)
 
             categories = CategoryUtils.getAllCategories()
@@ -55,6 +60,10 @@ class SearchFragment : HeadlinesBaseFragment(), TextWatcher {
             searchEt.addTextChangedListener(this)
             searchWord = ""
 
+            swipeToRefresh.setOnRefreshListener { // Your code to refresh the list here.
+                swipeToRefresh.isRefreshing = false
+                callHeadlines()
+            }
         }
         return root
     }

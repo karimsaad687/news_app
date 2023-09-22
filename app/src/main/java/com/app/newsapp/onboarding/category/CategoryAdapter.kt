@@ -38,7 +38,7 @@ class CategoryAdapter(
             position: Int,
             categoryFragment: CategoryFragment
         ) {
-            categoryNameTv.text = categoryModel.name
+            categoryNameTv.text = if(categoryFragment.activity.lang=="en") categoryModel.nameEn else categoryModel.nameAr
             categoryNameTv.setTextColor(
                 categoryFragment.requireContext()
                     .getColor(if (categoryModel.selected) R.color.green else R.color.black)

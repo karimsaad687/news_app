@@ -34,7 +34,7 @@ class CountryAdapter(
         private val countryNameTv = itemView.findViewById<TextView>(R.id.country_tv)
 
         fun onBind(countryModel: CountryModel, position: Int, countryFragment: CountryFragment) {
-            countryNameTv.text = countryModel.name
+            countryNameTv.text = if(countryFragment.activity.lang=="en") countryModel.nameEn else countryModel.nameAr
             itemView.setBackgroundResource(
                 if (countryModel.selected) R.drawable.country_item_border else R.drawable.country_item
             )

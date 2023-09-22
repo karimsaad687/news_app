@@ -34,7 +34,7 @@ open class Networking : ViewModel() {
 
                 override fun onError(anError: ANError) {
                     failed(anError)
-                    Log.i("datadata", anError.errorBody.toString())
+                    Log.i("datadata2", anError.errorBody.toString())
                 }
             })
     }

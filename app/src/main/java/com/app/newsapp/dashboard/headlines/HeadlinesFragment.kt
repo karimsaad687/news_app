@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.HORIZONTAL
 import androidx.recyclerview.widget.RecyclerView.VERTICAL
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.app.newsapp.R
 import com.app.newsapp.common.HeadlinesBaseFragment
 import com.app.newsapp.dashboard.Dashboard
@@ -18,6 +19,7 @@ import com.app.newsapp.onboarding.category.HorizontalCategoryAdapter
 class HeadlinesFragment : HeadlinesBaseFragment() {
 
     private lateinit var root: View
+    private lateinit var swipeToRefresh: SwipeRefreshLayout
     private var uiInitialized = false
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -29,6 +31,8 @@ class HeadlinesFragment : HeadlinesBaseFragment() {
             root = inflater.inflate(R.layout.fragment_headlines, container, false)
 
             noDataTv = root.findViewById(R.id.no_data_tv)
+            swipeToRefresh = root.findViewById(R.id.swipeToRefresh)
+            shimmerLoading = root.findViewById(R.id.loading_shimmer)
 
             val recycler = root.findViewById<RecyclerView>(R.id.recycler_categories)
             categoryAdapter = HorizontalCategoryAdapter(categories, this)
@@ -42,6 +46,11 @@ class HeadlinesFragment : HeadlinesBaseFragment() {
 
 
             getCategories()
+
+            swipeToRefresh.setOnRefreshListener { // Your code to refresh the list here.
+                swipeToRefresh.isRefreshing = false
+                callHeadlines()
+            }
         }
         return root
     }

@@ -22,7 +22,7 @@ open class BaseActivity : AppCompatActivity() {
     var isConnected = false
     var connectivityManager: ConnectivityManager? = null
     var activeNetworkInfo: NetworkInfo? = null
-    private lateinit var lang:String
+    lateinit var lang:String
 
     // to check if we are monitoring Network
     private val connectivityCallback: NetworkCallback = object : NetworkCallback() {

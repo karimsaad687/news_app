@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".Splash"
     android:background="@color/white">
+
     <ImageView
         android:id="@+id/logo_im"
         android:layout_width="300dp"
@@ -16,5 +17,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:importantForAccessibility="no"
-        android:alpha="0"/>
+        android:alpha="0" />
 </androidx.constraintlayout.widget.ConstraintLayout>

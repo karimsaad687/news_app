@@ -8,6 +8,7 @@ import android.widget.Button
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.VERTICAL
+import com.app.newsapp.Onboarding
 import com.app.newsapp.R
 import com.app.newsapp.common.BaseFragment
 import com.app.newsapp.utils.CountryUtils
@@ -58,5 +59,10 @@ class CountryFragment : BaseFragment() {
         }
         countryAdapter.notifyItemChanged(position)
         oldSelectedIndex=position
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (activity as Onboarding).setTitle(activity.getString(R.string.choose_country))
     }
 }

@@ -41,7 +41,7 @@ class HorizontalCategoryAdapter(
             position: Int,
             baseFragment: BaseFragment
         ) {
-            categoryNameTv.text = categoryModel.name
+            categoryNameTv.text = if(baseFragment.activity.lang=="en") categoryModel.nameEn else categoryModel.nameAr
             categoryNameTv.setTextColor(
                 baseFragment.requireContext()
                     .getColor(if (categoryModel.selected) R.color.green else R.color.black)
