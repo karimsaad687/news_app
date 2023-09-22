@@ -124,8 +124,12 @@ open class HeadlinesBaseFragment : BaseFragment() {
             categories.addAll(categoryDB.categoryDao().getAllCategories())
             categories[1].selected = false
             categories[2].selected = false
-            categoryAdapter.notifyDataSetChanged()
-            callHeadlines()
+            CoroutineScope(Dispatchers.Main).launch {
+                categoryAdapter.notifyDataSetChanged()
+                callHeadlines()
+            }
+
+
         }
     }
 
@@ -144,8 +148,10 @@ open class HeadlinesBaseFragment : BaseFragment() {
             }
             categories[1].selected = false
             categories[2].selected = false
-            categoryAdapter.notifyDataSetChanged()
-            callHeadlines()
+            CoroutineScope(Dispatchers.Main).launch {
+                categoryAdapter.notifyDataSetChanged()
+                callHeadlines()
+            }
         }
     }
 
