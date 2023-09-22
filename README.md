@@ -1,4 +1,9 @@
 /**
+
+        ***Please before start change api-key in the gradle.build file to prevent this error***
+***Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours).***
+                    ***Please upgrade to a paid plan if you need more requests***
+
 * Design pattern used in this project MVVM
 * Networking file extends ViewModel and consist of one function [get] function with parameters
 * url: url for the api
