@@ -16,7 +16,8 @@
         android:fontFamily="sans-serif-condensed-medium"
         android:textColor="@color/green_light"
         android:text="@string/you_must_choose_3_categories"
-        android:gravity="center"/>
+        android:gravity="center" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler"
         android:layout_width="match_parent"
