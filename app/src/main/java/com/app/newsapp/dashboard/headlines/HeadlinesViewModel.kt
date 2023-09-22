@@ -21,6 +21,7 @@ class HeadlinesViewModel : Networking() {
 
     override fun start(category: String, context: Context) {
         super.start(category, context)
+        Log.i("datadata",category)
         get(ConstantURLS.headlines, category, context)
     }
 
@@ -33,7 +34,6 @@ class HeadlinesViewModel : Networking() {
                 list.addLast(HeadlineModel(articlesArray.getJSONObject(i)))
             }
         }
-        Log.i("datadata2",(getLiveData()==null).toString())
         getLiveData()?.postValue(list)
     }
 }

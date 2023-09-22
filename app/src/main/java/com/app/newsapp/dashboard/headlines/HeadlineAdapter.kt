@@ -6,10 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.URLUtil
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.GONE
+import androidx.recyclerview.widget.RecyclerView.VISIBLE
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.app.newsapp.R
 import com.app.newsapp.common.BaseFragment
@@ -46,6 +48,7 @@ class HeadlineAdapter(
         private val articleDescTv = itemView.findViewById<TextView>(R.id.article_desc_tv)
         private val articleDateTv = itemView.findViewById<TextView>(R.id.article_date_tv)
         private val articleSourceTv = itemView.findViewById<TextView>(R.id.article_source_tv)
+        private val favIm = itemView.findViewById<ImageView>(R.id.fav_im)
 
         fun onBind(
             headlineModel: HeadlineModel,
@@ -56,17 +59,14 @@ class HeadlineAdapter(
             articleDateTv.text = DateUtils.convertIsoFormatToLocalTime(headlineModel.publishedAt)
             articleSourceTv.text = headlineModel.sourceName
 
-            if (headlineModel.sourceName.length < 5) {
-                articleSourceTv.visibility = GONE
-            }
-
-            if (headlineModel.description.length < 5) {
-                articleDescTv.visibility = GONE
-            }
+            favIm.setImageResource(if (headlineModel.isFav) R.drawable.ic_fav_on else R.drawable.ic_fav_off)
+            articleSourceTv.visibility = if (headlineModel.sourceName == "null") GONE else VISIBLE
+            articleDescTv.visibility = if (headlineModel.description == "null") GONE else VISIBLE
 
             if (headlineModel.urlToImage.length < 5) {
                 articleIm.visibility = GONE
             } else {
+                articleIm.visibility = VISIBLE
                 Picasso.get().load(headlineModel.urlToImage).into(articleIm)
             }
             if (URLUtil.isValidUrl(headlineModel.url)) {

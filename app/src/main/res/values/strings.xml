@@ -10,6 +10,7 @@
 
     //headlines
     <string name="headlines">Headlines</string>
+    <string name="no_data_found">No data found</string>
 
     //search
     <string name="search">Search</string>

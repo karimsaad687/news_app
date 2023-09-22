@@ -1,6 +1,5 @@
 package com.app.newsapp.onboarding.category
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.app.newsapp.R
 import com.app.newsapp.common.BaseFragment
+import com.app.newsapp.dashboard.headlines.HeadlinesFragment
 import java.util.LinkedList
 
 class HorizontalCategoryAdapter(
@@ -41,7 +41,6 @@ class HorizontalCategoryAdapter(
             baseFragment: BaseFragment
         ) {
             categoryNameTv.text = categoryModel.name
-            Log.i("datadata",categoryModel.selected.toString())
             categoryNameTv.setTextColor(
                 baseFragment.requireContext()
                     .getColor(if (categoryModel.selected) R.color.green else R.color.black)
@@ -50,7 +49,10 @@ class HorizontalCategoryAdapter(
                 if (categoryModel.selected) R.drawable.country_item_border else R.drawable.country_item
             )
             itemView.setOnClickListener {
-
+                categoryModel.selected = true
+                if (baseFragment is HeadlinesFragment) {
+                    baseFragment.onCategorySelected(position)
+                }
             }
         }
     }
