@@ -10,6 +10,7 @@
 
     //categories
     <string name="choose_category">اختر الفئة</string>
+    <string name="you_must_choose_3_categories">يجب اختيار ٣ فئات</string>
 
     //headlines
     <string name="headlines">العناوين</string>

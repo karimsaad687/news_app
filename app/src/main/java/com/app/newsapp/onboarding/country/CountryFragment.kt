@@ -8,7 +8,7 @@ import android.widget.Button
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.VERTICAL
-import com.app.newsapp.Onboarding
+import com.app.newsapp.onboarding.Onboarding
 import com.app.newsapp.R
 import com.app.newsapp.common.BaseFragment
 import com.app.newsapp.utils.CountryUtils

@@ -4,11 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Onboarding">
+    tools:context=".onboarding.Onboarding">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/topPanel_cl"
         android:layout_width="match_parent"
         android:layout_height="60dp">
+
         <TextView
             android:id="@+id/title_tv"
             android:layout_width="wrap_content"
@@ -18,29 +20,42 @@
             android:text="@string/choose_country"
             android:textColor="@color/black"
             android:textSize="18sp"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
+
         <TextView
             android:id="@+id/lang_tv"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_marginStart="16dp"
-            android:text="@string/lang"
+            android:layout_marginEnd="16dp"
             android:gravity="center"
+            android:text="@string/lang"
             android:textSize="21sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/back_im"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="16dp"
+            android:padding="8dp"
+            android:src="@drawable/ic_back"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragmentContainerView"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/topPanel_cl"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:defaultNavHost="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/topPanel_cl"
         app:navGraph="@navigation/nav_onboarding" />
 </androidx.constraintlayout.widget.ConstraintLayout>

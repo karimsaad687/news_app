@@ -54,12 +54,27 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginStart="16dp"
-            android:text="@string/lang"
+            android:fontFamily="sans-serif-condensed-medium"
             android:gravity="center"
+            android:includeFontPadding="false"
+            android:text="@string/lang"
             android:textSize="21sp"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/back_im"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="TextSizeCheck" />
+
+        <ImageView
+            android:id="@+id/back_im"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="16dp"
+            android:padding="8dp"
+            android:src="@drawable/ic_back"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:importantForAccessibility="no" />
 
         <ImageView
             android:id="@+id/fav_im"

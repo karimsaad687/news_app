@@ -60,6 +60,7 @@ class HeadlinesFragment : HeadlinesBaseFragment() {
         super.onResume()
         (activity as Dashboard).showHideSearch(true)
         (activity as Dashboard).showHideFav(true)
+        (activity as Dashboard).showHideBack(false)
         (activity as Dashboard).setTitle(activity.getString(R.string.headlines))
     }
 

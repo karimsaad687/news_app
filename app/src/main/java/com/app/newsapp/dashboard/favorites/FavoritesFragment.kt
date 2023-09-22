@@ -45,6 +45,7 @@ class FavoritesFragment : HeadlinesBaseFragment() {
         super.onResume()
         (activity as Dashboard).showHideSearch(false)
         (activity as Dashboard).showHideFav(false)
+        (activity as Dashboard).showHideBack(true)
         (activity as Dashboard).setTitle(activity.getString(R.string.favorites))
     }
 

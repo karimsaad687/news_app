@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.ImageView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.HORIZONTAL
@@ -29,6 +30,7 @@ class SearchFragment : HeadlinesBaseFragment(), TextWatcher {
     private lateinit var root: View
     private lateinit var swipeToRefresh: SwipeRefreshLayout
     private lateinit var searchEt: EditText
+    private lateinit var deleteTextIm: ImageView
     private var uiInitialized = false
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,6 +45,7 @@ class SearchFragment : HeadlinesBaseFragment(), TextWatcher {
             swipeToRefresh = root.findViewById(R.id.swipeToRefresh)
             shimmerLoading = root.findViewById(R.id.loading_shimmer)
             searchEt = root.findViewById(R.id.search_et)
+            deleteTextIm = root.findViewById(R.id.delete_text_im)
 
             categories = CategoryUtils.getAllCategories()
 
@@ -64,6 +67,13 @@ class SearchFragment : HeadlinesBaseFragment(), TextWatcher {
                 swipeToRefresh.isRefreshing = false
                 callHeadlines()
             }
+
+            deleteTextIm.setOnClickListener {
+                searchEt.setText("")
+                searchWord = ""
+                headlinesViewModel.cancel()
+                callHeadlines()
+            }
         }
         return root
     }
@@ -72,6 +82,7 @@ class SearchFragment : HeadlinesBaseFragment(), TextWatcher {
         super.onResume()
         (activity as Dashboard).showHideSearch(false)
         (activity as Dashboard).showHideFav(true)
+        (activity as Dashboard).showHideBack(true)
         (activity as Dashboard).setTitle(activity.getString(R.string.search))
     }
 

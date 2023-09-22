@@ -10,6 +10,7 @@
 
     //categories
     <string name="choose_category">Choose category</string>
+    <string name="you_must_choose_3_categories">You must choose 3 categories</string>
 
     //headlines
     <string name="headlines">Headlines</string>

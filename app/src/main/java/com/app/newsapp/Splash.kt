@@ -9,6 +9,7 @@ import androidx.room.Room
 import com.app.newsapp.common.BaseActivity
 import com.app.newsapp.dashboard.Dashboard
 import com.app.newsapp.database.category.CategoryDatabase
+import com.app.newsapp.onboarding.Onboarding
 import com.app.newsapp.utils.AnimationUtils
 import com.app.newsapp.utils.SharedPreferencesUtils
 import kotlinx.coroutines.Dispatchers

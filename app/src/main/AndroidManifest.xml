@@ -28,7 +28,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Onboarding"
+            android:name=".onboarding.Onboarding"
             android:exported="false"
             android:screenOrientation="unspecified" />
     </application>

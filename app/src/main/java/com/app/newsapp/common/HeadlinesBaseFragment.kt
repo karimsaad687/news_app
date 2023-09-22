@@ -174,6 +174,10 @@ open class HeadlinesBaseFragment : BaseFragment() {
      * but if you loop over the headlines list and compare the items with th fav list you will not
      * find it so it will be remove from the list
      * also this function happen on IO thread so it will never affect the performance of the ui
+     *
+     * lastly in the FavoritesFragment when you un-fav an item it will not be removed from the list in case you
+     * want to return it back, but if you press back or closed the app the item will become un-fav and will not appear
+     * in the list anymore
      */
     open fun checkFavHeadlines() {
         CoroutineScope(Dispatchers.IO).launch {
