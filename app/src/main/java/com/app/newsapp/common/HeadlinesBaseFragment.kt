@@ -101,6 +101,9 @@ open class HeadlinesBaseFragment : BaseFragment() {
         }
     }
 
+    /**
+     * used all over the app to get the headlines
+     */
     open fun callHeadlines() {
         headlineModels.clear()
         headlinesAdapter.notifyDataSetChanged()
@@ -112,6 +115,10 @@ open class HeadlinesBaseFragment : BaseFragment() {
         )
     }
 
+    /**
+     * used to get the stored categories from database
+     * this function used in HeadlinesFragment
+     */
     open fun getStoredCategories() {
         CoroutineScope(Dispatchers.IO).launch {
             categories.addAll(categoryDB.categoryDao().getAllCategories())
@@ -122,6 +129,12 @@ open class HeadlinesBaseFragment : BaseFragment() {
         }
     }
 
+    /**
+     * used to get the stored categories from database
+     * then remove them from all categories list then add them at the beginning of the list
+     * with the same order you selected from onboarding screen
+     * this function used in SearchFragment
+     */
     open fun getAllAndStoredCategories() {
         CoroutineScope(Dispatchers.IO).launch {
             val storedCategories =
@@ -137,6 +150,31 @@ open class HeadlinesBaseFragment : BaseFragment() {
         }
     }
 
+    /**
+     * used to store headlines item in the database as fav headlines
+     */
+    open fun addRemoveHeadlineToFav(model: HeadlineModel, position: Int) = runBlocking {
+        headlinesAdapter.notifyItemChanged(position)
+        withContext(Dispatchers.IO) {
+            if (model.isFav) {
+                val id = headlinesDB.headlineDao().insertHeadline(model)
+                model.id = id.toInt()
+            } else {
+                headlinesDB.headlineDao().deleteHeadline(model)
+            }
+        }
+    }
+
+    /**
+     * used get all the favorite headline stored in the database
+     * then loop on the headlines and check if anyone exist in the database and it fav selected
+     * need to loop on the headlines list not on the fav list because if you navigate to fav screen
+     * and removed an item from fav list then return back you will find it the same because it will
+     * not be in fav list anymore so no check will happen over it
+     * but if you loop over the headlines list and compare the items with th fav list you will not
+     * find it so it will be remove from the list
+     * also this function happen on IO thread so it will never affect the performance of the ui
+     */
     open fun checkFavHeadlines() {
         CoroutineScope(Dispatchers.IO).launch {
             val headlineStoredModels =
@@ -154,18 +192,6 @@ open class HeadlinesBaseFragment : BaseFragment() {
                 headlinesAdapter.notifyDataSetChanged()
             }
             //
-        }
-    }
-
-    open fun addRemoveHeadlineToFav(model: HeadlineModel, position: Int) = runBlocking {
-        headlinesAdapter.notifyItemChanged(position)
-        withContext(Dispatchers.IO) {
-            if (model.isFav) {
-                val id = headlinesDB.headlineDao().insertHeadline(model)
-                model.id = id.toInt()
-            } else {
-                headlinesDB.headlineDao().deleteHeadline(model)
-            }
         }
     }
 
