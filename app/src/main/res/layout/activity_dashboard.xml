@@ -37,6 +37,19 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
+            android:id="@+id/wifi_im"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="16dp"
+            android:importantForAccessibility="no"
+            android:padding="4dp"
+            android:src="@drawable/ic_signal_wifi_off"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
             android:id="@+id/fav_im"
             android:layout_width="40dp"
             android:layout_height="40dp"

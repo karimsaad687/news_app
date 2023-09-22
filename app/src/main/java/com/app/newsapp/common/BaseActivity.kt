@@ -15,7 +15,6 @@ import android.view.Window
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 
-@Suppress("DEPRECATION")
 open class BaseActivity : AppCompatActivity() {
     lateinit var baseFragment: BaseFragment
     var isConnected = false
@@ -26,7 +25,7 @@ open class BaseActivity : AppCompatActivity() {
     private val connectivityCallback: NetworkCallback = object : NetworkCallback() {
         override fun onAvailable(network: Network) {
             isConnected = true
-            connectionChanged(isConnected)
+            connectionChanged(true)
             Log.i("datadata", "INTERNET CONNECTED")
         }
 
@@ -55,7 +54,7 @@ open class BaseActivity : AppCompatActivity() {
         checkConnectivity()
     }
 
-    open fun isConnected(): Boolean {
+    open fun isNetworkConnected(): Boolean {
         return isConnected
     }
 
