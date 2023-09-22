@@ -17,7 +17,7 @@ class DateUtils {
             isoUtcFormat.timeZone = TimeZone.getTimeZone("UTC")
             val date = isoUtcFormat.parse(stringDate)
 
-            val dateFormat: DateFormat = SimpleDateFormat("dd/mm/yyyy hh:mm a")
+            val dateFormat: DateFormat = SimpleDateFormat("dd/MM/yyyy hh:mm a")
             return dateFormat.format(date as Date)
         }
     }

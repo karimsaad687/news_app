@@ -1,11 +1,16 @@
-package com.app.newsapp.dashboard.headlines
+package com.app.newsapp.dashboard.search
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,43 +22,49 @@ import androidx.room.Room
 import com.app.newsapp.R
 import com.app.newsapp.common.BaseFragment
 import com.app.newsapp.dashboard.Dashboard
+import com.app.newsapp.dashboard.headlines.HeadlineAdapter
+import com.app.newsapp.dashboard.headlines.HeadlineModel
+import com.app.newsapp.dashboard.headlines.HeadlinesViewModel
 import com.app.newsapp.database.category.CategoryDatabase
 import com.app.newsapp.onboarding.category.CategoryModel
 import com.app.newsapp.onboarding.category.HorizontalCategoryAdapter
+import com.app.newsapp.utils.CategoryUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
-import java.util.ArrayList
 import java.util.LinkedList
 
 @SuppressLint("NotifyDataSetChanged")
-class HeadlinesFragment : BaseFragment() {
+class SearchFragment : BaseFragment(), TextWatcher {
 
     private lateinit var headlinesAdapter: HeadlineAdapter
     private lateinit var categoryAdapter: HorizontalCategoryAdapter
     private lateinit var db: CategoryDatabase
     private lateinit var root: View
     private lateinit var noDataTv: TextView
+    private lateinit var searchEt: EditText
     private var storedCategories = LinkedList<CategoryModel>()
     private var headlineModel = ArrayList<HeadlineModel>()
     private var selectedCategoryIndex = 0
     private lateinit var headlinesViewModel: HeadlinesViewModel
     private lateinit var observer: Observer<ArrayList<HeadlineModel>>
     private var oldSelectedIndex = 0
-    private var uiInitialized=false
+    private var uiInitialized = false
+    private var searchWord=""
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        if(!uiInitialized) {
-            uiInitialized=true
-            root = inflater.inflate(R.layout.fragment_headlines, container, false)
+        if (!uiInitialized) {
+            uiInitialized = true
+            root = inflater.inflate(R.layout.fragment_search, container, false)
 
             noDataTv = root.findViewById(R.id.no_data_tv)
+            searchEt = root.findViewById(R.id.search_et)
 
             val recycler = root.findViewById<RecyclerView>(R.id.recycler_categories)
-            categoryAdapter = HorizontalCategoryAdapter(storedCategories, this)
+            categoryAdapter = HorizontalCategoryAdapter(CategoryUtils.getAllCategories(), this)
             recycler.layoutManager = LinearLayoutManager(requireContext(), HORIZONTAL, false)
             recycler.adapter = categoryAdapter
 
@@ -76,6 +87,8 @@ class HeadlinesFragment : BaseFragment() {
             headlinesViewModel.getLiveData()?.observeForever(observer)
 
             getCategories()
+            searchEt.addTextChangedListener(this)
+
         }
         return root
     }
@@ -92,14 +105,12 @@ class HeadlinesFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        (activity as Dashboard).showHide(true)
-        (activity as Dashboard).setTitle(activity.getString(R.string.headlines))
+        (activity as Dashboard).showHide(false)
+        (activity as Dashboard).setTitle(activity.getString(R.string.search))
     }
 
     private fun callHeadlines() {
-        headlineModel.clear()
-        headlinesAdapter.notifyDataSetChanged()
-        headlinesViewModel.start(storedCategories[selectedCategoryIndex].name,null, requireContext())
+        headlinesViewModel.start(storedCategories[selectedCategoryIndex].name,searchWord, requireContext())
     }
 
     fun onCategorySelected(position: Int) {
@@ -115,5 +126,22 @@ class HeadlinesFragment : BaseFragment() {
             headlinesAdapter.notifyDataSetChanged()
             callHeadlines()
         }
+    }
+
+    override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+    }
+
+    override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+        Handler(Looper.getMainLooper()).postDelayed({
+            if(searchWord != searchEt.text.toString()){
+                searchWord = searchEt.text.toString()
+                callHeadlines()
+            }
+        }, 500)
+    }
+
+    override fun afterTextChanged(p0: Editable?) {
+
     }
 }

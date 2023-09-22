@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.app.newsapp.R
 import com.app.newsapp.common.BaseFragment
 import com.app.newsapp.dashboard.headlines.HeadlinesFragment
+import com.app.newsapp.dashboard.search.SearchFragment
 import java.util.LinkedList
 
 class HorizontalCategoryAdapter(
@@ -51,6 +52,8 @@ class HorizontalCategoryAdapter(
             itemView.setOnClickListener {
                 categoryModel.selected = true
                 if (baseFragment is HeadlinesFragment) {
+                    baseFragment.onCategorySelected(position)
+                }else if (baseFragment is SearchFragment) {
                     baseFragment.onCategorySelected(position)
                 }
             }

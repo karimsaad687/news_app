@@ -8,4 +8,8 @@
         android:id="@+id/headlinesFragment"
         android:name="com.app.newsapp.dashboard.headlines.HeadlinesFragment"
         android:label="HeadlinesFragment" />
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.app.newsapp.dashboard.search.SearchFragment"
+        android:label="SearchFragment" />
 </navigation>

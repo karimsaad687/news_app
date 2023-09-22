@@ -7,8 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 
 @Suppress("DEPRECATION")
 open class BaseActivity : AppCompatActivity() {
-
-
+    lateinit var baseFragment: BaseFragment
     fun hideStatusBar() {
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
         this.window.setFlags(
@@ -24,4 +23,9 @@ open class BaseActivity : AppCompatActivity() {
             WindowManager.LayoutParams.FLAG_FULLSCREEN
         )
     }
+
+    fun setFragment(baseFragment: BaseFragment) {
+        this.baseFragment = baseFragment
+    }
+
 }

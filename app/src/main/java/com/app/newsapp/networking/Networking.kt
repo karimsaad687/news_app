@@ -13,11 +13,15 @@ import org.json.JSONObject
 
 open class Networking : ViewModel() {
 
-    open fun get(url: String, category: String, context: Context) {
+    open fun get(url: String, category: String,searchWord: String? = null, context: Context) {
         val map = HashMap<String, String>()
-        map.put("category", category)
-        map.put("apiKey", BuildConfig.app_key)
-        map.put("country", SharedPreferencesUtils.getCountry(context).toString())
+        map["category"] = category
+        map["apiKey"] = BuildConfig.app_key
+        map["country"] = SharedPreferencesUtils.getCountry(context).toString()
+        if (searchWord != null) {
+            map["q"] = searchWord
+        }
+        Log.i("datadata",map.toString()+"")
         AndroidNetworking.get(url)
             .setPriority(Priority.MEDIUM)
             .addQueryParameter(map)
@@ -34,7 +38,7 @@ open class Networking : ViewModel() {
             })
     }
 
-    open fun start(category: String, context: Context) {
+    open fun start(category: String, searchWord: String? = null, context: Context) {
 
     }
 

@@ -22,7 +22,7 @@
             android:textSize="18sp"
             app:layout_constraintTop_toTopOf="parent" />
         <ImageView
-            android:id="@+id/search"
+            android:id="@+id/search_im"
             android:layout_width="40dp"
             android:layout_height="match_parent"
             app:layout_constraintEnd_toEndOf="parent"

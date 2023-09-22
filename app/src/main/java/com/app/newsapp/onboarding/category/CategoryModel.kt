@@ -9,7 +9,7 @@ data class CategoryModel constructor(
     @ColumnInfo(name = "name") val name: String
 ){
     @PrimaryKey(autoGenerate = true)
-    var id: Int = 0 // or foodId: Int? = null
+    var id: Int = 0
 
     var selected:Boolean=false
 }

@@ -18,11 +18,11 @@ import com.app.newsapp.common.BaseFragment
 import com.app.newsapp.utils.DateUtils
 import com.makeramen.roundedimageview.RoundedImageView
 import com.squareup.picasso.Picasso
-import java.util.LinkedList
+import java.util.ArrayList
 
 
 class HeadlineAdapter(
-    private val list: LinkedList<HeadlineModel>,
+    private val list: ArrayList<HeadlineModel>,
     private val baseFragment: BaseFragment
 ) :
     Adapter<HeadlineAdapter.Holder>() {
