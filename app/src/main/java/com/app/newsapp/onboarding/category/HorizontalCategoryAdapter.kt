@@ -1,5 +1,6 @@
 package com.app.newsapp.onboarding.category
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -40,6 +41,7 @@ class HorizontalCategoryAdapter(
             baseFragment: BaseFragment
         ) {
             categoryNameTv.text = categoryModel.name
+            Log.i("datadata",categoryModel.selected.toString())
             categoryNameTv.setTextColor(
                 baseFragment.requireContext()
                     .getColor(if (categoryModel.selected) R.color.green else R.color.black)
