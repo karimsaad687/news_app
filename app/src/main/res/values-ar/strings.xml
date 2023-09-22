@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">NewsApp</string>
+    //dashboard
+    <string name="lang">en</string>
+
+    //countries
+    <string name="choose_country">اختر المدينة</string>
+    <string name="confirm">تأكيد</string>
+
+    //categories
+    <string name="choose_category">اختر الفئة</string>
+
+    //headlines
+    <string name="headlines">العناوين</string>
+    <string name="no_data_found">لا يوجد بيانات متاحة</string>
+
+    //search
+    <string name="search">بحث</string>
+
+    //favorites
+    <string name="favorites">المفضلة</string>
+
+</resources>

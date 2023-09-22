@@ -16,6 +16,7 @@ class Dashboard : BaseActivity() {
     private lateinit var searchIm: ImageView
     private lateinit var favIm: ImageView
     private lateinit var wifiIm: ImageView
+    private lateinit var langTv: TextView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
@@ -24,6 +25,7 @@ class Dashboard : BaseActivity() {
         searchIm = findViewById(R.id.search_im)
         favIm = findViewById(R.id.fav_im)
         wifiIm = findViewById(R.id.wifi_im)
+        langTv = findViewById(R.id.lang_tv)
 
         searchIm.setOnClickListener {
             baseFragment.navigateTo(R.id.searchFragment)
@@ -31,6 +33,10 @@ class Dashboard : BaseActivity() {
 
         favIm.setOnClickListener {
             baseFragment.navigateTo(R.id.favoritesFragment)
+        }
+
+        langTv.setOnClickListener {
+            changeLang()
         }
     }
 

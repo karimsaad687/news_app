@@ -14,12 +14,15 @@ import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
+import com.app.newsapp.utils.SharedPreferencesUtils
+import java.util.Locale
 
 open class BaseActivity : AppCompatActivity() {
     lateinit var baseFragment: BaseFragment
     var isConnected = false
     var connectivityManager: ConnectivityManager? = null
     var activeNetworkInfo: NetworkInfo? = null
+    private lateinit var lang:String
 
     // to check if we are monitoring Network
     private val connectivityCallback: NetworkCallback = object : NetworkCallback() {
@@ -63,6 +66,9 @@ open class BaseActivity : AppCompatActivity() {
         connectivityManager = getSystemService(
             CONNECTIVITY_SERVICE
         ) as ConnectivityManager
+        lang = SharedPreferencesUtils.getLang(this).toString()
+
+        setLang()
     }
 
     fun hideStatusBar() {
@@ -83,6 +89,40 @@ open class BaseActivity : AppCompatActivity() {
 
     fun setFragment(baseFragment: BaseFragment) {
         this.baseFragment = baseFragment
+    }
+
+    open fun changeLang() {
+
+        lang = if (lang == "en") "ar" else "en"
+        SharedPreferencesUtils.setLang(this, lang)
+        val locale = Locale(lang)
+        Locale.setDefault(locale)
+        val config = baseContext.resources.configuration
+        config.setLocale(locale)
+        config.setLayoutDirection(locale)
+        window.decorView.layoutDirection =
+            if (lang == "en") View.LAYOUT_DIRECTION_LTR else View.LAYOUT_DIRECTION_RTL
+        baseContext.resources.updateConfiguration(
+            config,
+            baseContext.resources.displayMetrics
+        )
+
+        recreate()
+    }
+
+    open fun setLang() {
+        SharedPreferencesUtils.setLang(this, lang)
+        val locale = Locale(lang)
+        Locale.setDefault(locale)
+        val config = baseContext.resources.configuration
+        config.setLocale(locale)
+        config.setLayoutDirection(locale)
+        window.decorView.layoutDirection =
+            if (lang == "en") View.LAYOUT_DIRECTION_LTR else View.LAYOUT_DIRECTION_RTL
+        baseContext.resources.updateConfiguration(
+            config,
+            baseContext.resources.displayMetrics
+        )
     }
 
 }

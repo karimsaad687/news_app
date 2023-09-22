@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">NewsApp</string>
 
+    //dashboard
+    <string name="lang">ع</string>
+
     //countries
     <string name="choose_country">Choose country</string>
     <string name="confirm">Confirm</string>
