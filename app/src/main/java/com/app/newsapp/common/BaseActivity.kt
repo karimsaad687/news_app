@@ -23,13 +23,14 @@ open class BaseActivity : AppCompatActivity() {
     var activeNetworkInfo: NetworkInfo? = null
     lateinit var lang: String
 
-    // to check if we are monitoring Network
+    //monitoring Network
     private val connectivityCallback: NetworkCallback = object : NetworkCallback() {
         override fun onAvailable(network: Network) {
             isConnected = true
             connectionChanged(true)
         }
 
+        //added another check in case change from wifi to data
         override fun onLost(network: Network) {
             isConnected = false
             activeNetworkInfo = connectivityManager!!.activeNetworkInfo
