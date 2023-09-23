@@ -21,7 +21,7 @@ android {
 
     buildTypes {
         all{
-            buildConfigField "String", "app_key", "\"0487afd54cac455db593b1b4d271126f\""
+            buildConfigField "String", "app_key", "\"a1550a62000c4377886e1f84e0ba97c4\""
         }
         release {
             minifyEnabled false
