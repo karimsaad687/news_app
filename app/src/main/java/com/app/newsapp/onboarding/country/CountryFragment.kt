@@ -8,9 +8,9 @@ import android.widget.Button
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.VERTICAL
-import com.app.newsapp.onboarding.Onboarding
 import com.app.newsapp.R
 import com.app.newsapp.common.BaseFragment
+import com.app.newsapp.onboarding.Onboarding
 import com.app.newsapp.utils.CountryUtils
 import com.app.newsapp.utils.SharedPreferencesUtils
 import java.util.LinkedList
@@ -23,14 +23,14 @@ class CountryFragment : BaseFragment() {
     private var countrySelected = false
     private var oldSelectedIndex = -1
     private lateinit var countryModels: LinkedList<CountryModel>
-    private var uiInitialized=false
+    private var uiInitialized = false
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        if(!uiInitialized) {
-            uiInitialized=true
+        if (!uiInitialized) {
+            uiInitialized = true
             root = inflater.inflate(R.layout.fragment_countries, container, false)
 
             confirmBtn = root.findViewById(R.id.confirm_btn)
@@ -53,12 +53,12 @@ class CountryFragment : BaseFragment() {
         SharedPreferencesUtils.setCountry(requireContext(), model.iso)
         countrySelected = model.selected
         confirmBtn.alpha = if (model.selected) 1.0f else 0.3f
-        if (oldSelectedIndex > -1 && oldSelectedIndex!=position && countryModels[oldSelectedIndex].selected) {
-            countryModels[oldSelectedIndex].selected=false
+        if (oldSelectedIndex > -1 && oldSelectedIndex != position && countryModels[oldSelectedIndex].selected) {
+            countryModels[oldSelectedIndex].selected = false
             countryAdapter.notifyItemChanged(oldSelectedIndex)
         }
         countryAdapter.notifyItemChanged(position)
-        oldSelectedIndex=position
+        oldSelectedIndex = position
     }
 
     override fun onResume() {

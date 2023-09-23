@@ -19,7 +19,6 @@ import com.app.newsapp.utils.CategoryUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import java.util.LinkedList
 
 class CategoryFragment : BaseFragment() {
@@ -83,7 +82,7 @@ class CategoryFragment : BaseFragment() {
         return numberOfSelectedItem
     }
 
-    fun onCategorySelected(model: CategoryModel, position: Int) = runBlocking {
+    fun onCategorySelected(model: CategoryModel, position: Int) {
         categoryAdapter.notifyItemChanged(position)
         numberOfSelectedItem += if (model.selected) 1 else -1
 

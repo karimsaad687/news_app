@@ -69,7 +69,7 @@ class SearchFragment : HeadlinesBaseFragment(), TextWatcher {
             }
 
             deleteTextIm.setOnClickListener {
-                if(searchEt.text.isNotEmpty()) {
+                if (searchEt.text.isNotEmpty()) {
                     searchEt.setText("")
                     searchWord = ""
                     headlinesViewModel.cancel()
@@ -94,7 +94,7 @@ class SearchFragment : HeadlinesBaseFragment(), TextWatcher {
     }
 
     override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-        deleteTextIm.visibility = if(searchEt.text.isNotEmpty()) View.VISIBLE else View.GONE
+        deleteTextIm.visibility = if (searchEt.text.isNotEmpty()) View.VISIBLE else View.GONE
         Handler(Looper.getMainLooper()).postDelayed({
             if (searchWord != searchEt.text.toString()) {
                 searchWord = searchEt.text.toString()

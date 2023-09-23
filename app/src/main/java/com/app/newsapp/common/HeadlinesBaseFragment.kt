@@ -2,7 +2,6 @@ package com.app.newsapp.common
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.lifecycle.Observer
@@ -53,7 +52,6 @@ open class HeadlinesBaseFragment : BaseFragment() {
 
         headlinesViewModel = HeadlinesViewModel()
         observer = Observer { list ->
-            Log.i("datadata", "error " + list.size)
             headlineModels.addAll(list)
             showHideLoading(false)
             checkFavHeadlines()
@@ -67,7 +65,6 @@ open class HeadlinesBaseFragment : BaseFragment() {
     override fun onResume() {
         super.onResume()
         if (headlineModels.size > 0) {
-            Log.i("datadata", "hello")
             checkFavHeadlines()
         }
     }

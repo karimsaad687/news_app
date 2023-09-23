@@ -38,7 +38,8 @@ class CategoryAdapter(
             position: Int,
             categoryFragment: CategoryFragment
         ) {
-            categoryNameTv.text = if(categoryFragment.activity.lang=="en") categoryModel.nameEn else categoryModel.nameAr
+            categoryNameTv.text =
+                if (categoryFragment.activity.lang == "en") categoryModel.nameEn else categoryModel.nameAr
             categoryNameTv.setTextColor(
                 categoryFragment.requireContext()
                     .getColor(if (categoryModel.selected) R.color.green else R.color.black)
@@ -47,7 +48,7 @@ class CategoryAdapter(
                 if (categoryModel.selected) R.drawable.country_item_border else R.drawable.country_item
             )
             itemView.setOnClickListener {
-                if(categoryFragment.getNumberOfSelectedCategories()<3 || (categoryFragment.getNumberOfSelectedCategories()==3 && categoryModel.selected)) {
+                if (categoryFragment.getNumberOfSelectedCategories() < 3 || (categoryFragment.getNumberOfSelectedCategories() == 3 && categoryModel.selected)) {
                     categoryModel.selected = !categoryModel.selected
                     categoryFragment.onCategorySelected(categoryModel, position)
                 }

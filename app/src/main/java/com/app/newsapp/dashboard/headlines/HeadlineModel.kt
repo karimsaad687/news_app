@@ -9,16 +9,22 @@ import org.json.JSONObject
 data class HeadlineModel constructor(@ColumnInfo(name = "name") val jsonString: String) {
     @ColumnInfo(name = "sourceName")
     lateinit var sourceName: String
+
     @ColumnInfo(name = "title")
     var title: String
+
     @ColumnInfo(name = "description")
     var description: String
+
     @ColumnInfo(name = "url")
     var url: String
+
     @ColumnInfo(name = "urlToImage")
     var urlToImage: String
+
     @ColumnInfo(name = "publishedAt")
     var publishedAt: String
+
     @ColumnInfo(name = "isFav")
     var isFav = false
 

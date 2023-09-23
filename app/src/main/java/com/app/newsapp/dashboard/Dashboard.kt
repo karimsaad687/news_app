@@ -61,7 +61,7 @@ class Dashboard : BaseActivity() {
     }
 
     fun setTitle(title: String) {
-        titleTv.text=title
+        titleTv.text = title
     }
 
     override fun connectionChanged(state: Boolean) {
@@ -73,6 +73,6 @@ class Dashboard : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        wifiIm.visibility = if(isNetworkConnected()) View.GONE else View.VISIBLE
+        wifiIm.visibility = if (isNetworkConnected()) View.GONE else View.VISIBLE
     }
 }

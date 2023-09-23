@@ -41,7 +41,8 @@ class HorizontalCategoryAdapter(
             position: Int,
             baseFragment: BaseFragment
         ) {
-            categoryNameTv.text = if(baseFragment.activity.lang=="en") categoryModel.nameEn else categoryModel.nameAr
+            categoryNameTv.text =
+                if (baseFragment.activity.lang == "en") categoryModel.nameEn else categoryModel.nameAr
             categoryNameTv.setTextColor(
                 baseFragment.requireContext()
                     .getColor(if (categoryModel.selected) R.color.green else R.color.black)
@@ -53,7 +54,7 @@ class HorizontalCategoryAdapter(
                 categoryModel.selected = true
                 if (baseFragment is HeadlinesFragment) {
                     baseFragment.onCategorySelected(position)
-                }else if (baseFragment is SearchFragment) {
+                } else if (baseFragment is SearchFragment) {
                     baseFragment.onCategorySelected(position)
                 }
             }

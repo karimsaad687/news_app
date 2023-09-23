@@ -9,7 +9,6 @@ import android.net.NetworkCapabilities
 import android.net.NetworkInfo
 import android.net.NetworkRequest
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
@@ -22,14 +21,13 @@ open class BaseActivity : AppCompatActivity() {
     var isConnected = false
     var connectivityManager: ConnectivityManager? = null
     var activeNetworkInfo: NetworkInfo? = null
-    lateinit var lang:String
+    lateinit var lang: String
 
     // to check if we are monitoring Network
     private val connectivityCallback: NetworkCallback = object : NetworkCallback() {
         override fun onAvailable(network: Network) {
             isConnected = true
             connectionChanged(true)
-            Log.i("datadata", "INTERNET CONNECTED")
         }
 
         override fun onLost(network: Network) {
@@ -37,7 +35,6 @@ open class BaseActivity : AppCompatActivity() {
             activeNetworkInfo = connectivityManager!!.activeNetworkInfo
             isConnected = activeNetworkInfo != null && activeNetworkInfo!!.isConnectedOrConnecting
             connectionChanged(isConnected)
-            Log.i("datadata", if (isConnected) "INTERNET CONNECTED" else "INTERNET LOST")
         }
     }
 
@@ -67,7 +64,9 @@ open class BaseActivity : AppCompatActivity() {
             CONNECTIVITY_SERVICE
         ) as ConnectivityManager
         lang = SharedPreferencesUtils.getLang(this).toString()
-
+        if (lang == "") {
+            lang = Locale.getDefault().language
+        }
         setLang()
     }
 

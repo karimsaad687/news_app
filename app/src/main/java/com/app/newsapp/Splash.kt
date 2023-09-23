@@ -48,13 +48,9 @@ class Splash : BaseActivity() {
                 CategoryDatabase::class.java, "CategoryTable"
             ).fallbackToDestructiveMigration().build()
             val numberOfCategories = db.categoryDao().getAllCategories().size
-
             isDataReady = !SharedPreferencesUtils.getCountry(this@Splash)
                 .equals("") && numberOfCategories == 3
 
-            if (numberOfCategories != 3) {
-                db.categoryDao().deleteAllCategories()
-            }
 
         }
     }

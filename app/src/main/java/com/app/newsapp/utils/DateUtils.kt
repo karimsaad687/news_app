@@ -11,7 +11,7 @@ class DateUtils {
 
     companion object {
         @SuppressLint("SimpleDateFormat")
-        fun convertIsoFormatToLocalTime(stringDate: String):String {
+        fun convertIsoFormatToLocalTime(stringDate: String): String {
             val isoUtcFormat: DateFormat =
                 SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
             isoUtcFormat.timeZone = TimeZone.getTimeZone("UTC")

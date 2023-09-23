@@ -8,35 +8,35 @@ class SharedPreferencesUtils {
     companion object {
         fun getCountry(context: Context): String? {
             val sharedPreferences = context.getSharedPreferences(
-                context.getString(R.string.app_name), Context.MODE_PRIVATE
+                context.getString(R.string.shared_pref_name), Context.MODE_PRIVATE
             )
             return sharedPreferences.getString(
-                context.getString(R.string.app_name) + "_country", ""
+                context.getString(R.string.shared_pref_name) + "_country", ""
             )
         }
 
         fun setCountry(context: Context, country: String?) {
             val editor = context.getSharedPreferences(
-                context.getString(R.string.app_name), Context.MODE_PRIVATE
+                context.getString(R.string.shared_pref_name), Context.MODE_PRIVATE
             ).edit()
-            editor.putString(context.getString(R.string.app_name) + "_country", country)
+            editor.putString(context.getString(R.string.shared_pref_name) + "_country", country)
             editor.apply()
         }
 
         fun getLang(context: Context): String? {
             val sharedPreferences = context.getSharedPreferences(
-                context.getString(R.string.app_name), Context.MODE_PRIVATE
+                context.getString(R.string.shared_pref_name), Context.MODE_PRIVATE
             )
             return sharedPreferences.getString(
-                context.getString(R.string.app_name) + "_lang", "en"
+                context.getString(R.string.shared_pref_name) + "_lang", ""
             )
         }
 
         fun setLang(context: Context, lang: String?) {
             val editor = context.getSharedPreferences(
-                context.getString(R.string.app_name), Context.MODE_PRIVATE
+                context.getString(R.string.shared_pref_name), Context.MODE_PRIVATE
             ).edit()
-            editor.putString(context.getString(R.string.app_name) + "_lang", lang)
+            editor.putString(context.getString(R.string.shared_pref_name) + "_lang", lang)
             editor.apply()
         }
     }

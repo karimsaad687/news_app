@@ -31,7 +31,7 @@ class Onboarding : BaseActivity() {
     }
 
     fun setTitle(title: String) {
-        titleTv.text=title
+        titleTv.text = title
     }
 
 }

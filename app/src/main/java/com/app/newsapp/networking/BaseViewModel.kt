@@ -1,7 +1,6 @@
 package com.app.newsapp.networking
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.androidnetworking.AndroidNetworking
 import com.androidnetworking.common.Priority
@@ -13,7 +12,7 @@ import org.json.JSONObject
 
 open class BaseViewModel : ViewModel() {
 
-    open fun get(url: String, category: String,searchWord: String? = null, context: Context) {
+    open fun get(url: String, category: String, searchWord: String? = null, context: Context) {
         val map = HashMap<String, String>()
         map["category"] = category
         map["apiKey"] = BuildConfig.app_key
@@ -21,25 +20,22 @@ open class BaseViewModel : ViewModel() {
         if (searchWord != null) {
             map["q"] = searchWord
         }
-        Log.i("datadata",map.toString()+"")
         AndroidNetworking.get(url)
             .setPriority(Priority.MEDIUM)
             .addQueryParameter(map)
             .build()
             .getAsJSONObject(object : JSONObjectRequestListener {
                 override fun onResponse(jsonObject: JSONObject) {
-                    Log.i("datadata", jsonObject.toString())
                     success(jsonObject)
                 }
 
                 override fun onError(anError: ANError) {
                     failed(anError)
-                    Log.i("datadata2", anError.errorBody.toString())
                 }
             })
     }
 
-    open fun cancel(){
+    open fun cancel() {
         AndroidNetworking.cancelAll()
     }
 
